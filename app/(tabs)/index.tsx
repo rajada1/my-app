@@ -1,74 +1,173 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+// import React, { useState } from 'react';
+// import { StyleSheet, TextInput, Button, View } from 'react-native';
+// import { WebView } from 'react-native-webview';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+// export default function HomeScreen() {
+//   const [url, setUrl] = useState('https://atlasbroker.io/traderoom');
+//   const [webViewUrl, setWebViewUrl] = useState('https://atlasbroker.io/');
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
+//   const isValidUrl = (string: string) => {
+//     try {
+//       new URL(string);
+//       return true;
+//     } catch (_) {
+//       return false;
+//     }
+//   };
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+//   const handleLoadSite = () => {
+//     if (isValidUrl(url)) {
+//       setWebViewUrl(url); // Atualiza a URL da WebView
+//     } else {
+//       // Alert.alert('Erro', 'Por favor, insira uma URL válida (ex: https://google.com)');
+//     }
+//   };
+
+//   // Função para lidar com mensagens da WebView
+//   const handleWebViewMessage = (event: any) => {
+//     console.log('Mensagem recebida da WebView:', event.nativeEvent.data);
+//   };
+//   // Código injetado para interceptar requisições de rede
+//   const debugging = `
+//     (function() {
+//       // Interceptando o fetch
+//       const originalFetch = window.fetch;
+//       window.fetch = function() {
+//         const args = arguments;
+//         const request = {
+//           url: args[0],
+//           method: args[1]?.method || 'GET',
+//           headers: args[1]?.headers || {},
+//           body: args[1]?.body || null,
+//         };
+
+//         window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'request', data: request }));
+
+//         return originalFetch.apply(window, args).then(response => {
+//           response.clone().text().then(body => {
+//             window.ReactNativeWebView.postMessage(JSON.stringify({
+//               type: 'response',
+//               data: { url: args[0], status: response.status, body }
+//             }));
+//           });
+//           return response;
+//         });
+//       };
+
+//       // Interceptando XMLHttpRequest
+//       const originalOpen = XMLHttpRequest.prototype.open;
+//       XMLHttpRequest.prototype.open = function(method, url) {
+//         this.addEventListener('load', function() {
+//           window.ReactNativeWebView.postMessage(JSON.stringify({
+//             type: 'response',
+//             data: { url, status: this.status, body: this.responseText }
+//           }));
+//         });
+//         originalOpen.apply(this, arguments);
+//       };
+//     })();
+//   `;
+
+//   interface WebViewMessageEvent {
+//     nativeEvent: {
+//       data: string;
+//     };
+//   }
+
+//   interface DataPayload {
+//     type: string;
+//     data: any;
+//   }
+
+//   const onMessage = (payload: WebViewMessageEvent) => {
+//     let dataPayload: DataPayload | undefined;
+//     try {
+//       dataPayload = JSON.parse(payload.nativeEvent.data);
+//     } catch (e) {}
+
+//     if (dataPayload) {
+//       if (dataPayload.type === 'request') {
+//         console.log('[Requisição] ', dataPayload.data);
+//       } else if (dataPayload.type === 'response') {
+//         console.log('[Resposta] ', dataPayload.data);
+//       } else {
+//         console.log(dataPayload);
+//       }
+//     }
+//   };
+
+//   return (
+//     <View style={{ flex: 1 }}>
+//       {/* Cabeçalho simplificado */}
+//       <View style={styles.header}>
+//         {/* <Text style={styles.headerText}>Welcome</Text> */}
+//       </View>
+
+//       {/* Campo de texto e botão para abrir o site */}
+//       <View style={styles.inputContainer}>
+//         <TextInput
+//           style={styles.input}
+//           placeholder="Digite a URL do site (ex: https://google.com)"
+//           value={url}
+//           onChangeText={setUrl}
+//         />
+//         <Button title="Abrir Site" onPress={handleLoadSite} />
+//       </View>
+
+//       {/* WebView para exibir o site */}
+//       {webViewUrl ? (
+//         <WebView
+//           originWhitelist={['*']}
+//           onLoad={() => console.log('WebView loaded')}
+//           source={{ uri: webViewUrl }}
+//           style={styles.webview}
+//           javaScriptEnabled={true}
+//           domStorageEnabled={true}
+//           injectedJavaScript={debugging}
+//           onMessage={onMessage} // Captura as mensagens enviadas pela WebView
+//           keyboardDisplayRequiresUserAction={false}
+//         />
+//       ) : (
+//         <View style={styles.placeholder}>
+//           {/* <Text>Digite uma URL e clique em "Abrir Site".</Text> */}
+//         </View>
+//       )}
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   header: {
+//     height: 50, // Altura do cabeçalho
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#A1CEDC', // Cor de fundo
+//   },
+//   headerText: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     color: '#1D3D47', // Cor do texto
+//   },
+//   inputContainer: {
+//     padding: 16,
+//     flexDirection: 'row',
+//     gap: 8,
+//     alignItems: 'center',
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     borderRadius: 8,
+//     padding: 8,
+//     fontSize: 16,
+//     flex: 1,
+//   },
+//   webview: {
+//     flex: 1,
+//   },
+//   placeholder: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+// });
